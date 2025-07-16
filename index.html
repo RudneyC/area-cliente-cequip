@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Cliente - Cequip</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .kanban-column {
+      min-height: 400px;
+      min-width: 300px;
+      padding: 10px;
+      background-color: #f7fafc;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+    .kanban-card {
+      background-color: white;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      cursor: move;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .kanban-card.dragging { opacity: 0.5; }
+    .chat-bubble { position: absolute; top: 5px; right: 5px; cursor: pointer; }
+    .filter-section { display: none; }
+    .filter-section.active { display: block; }
+    .dashboard-card { transition: transform 0.3s; }
+    .dashboard-card:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-blue-50 font-sans">
+  <div class="container mx-auto p-6">
+    <header class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-blue-800 mb-2">Bem-vindo à Área do Cliente - Cequip</h1>
+      <p class="text-lg text-gray-600">Gerencie sua frota, serviços, estoque e finanças com a gente!</p>
+    </header>
+
+    <!-- Abas -->
+    <div class="flex border-b-2 border-blue-300 mb-6">
+      <button class="tab-button px-6 py-3 text-lg font-semibold bg-white hover:bg-blue-50 focus:bg-blue-100 focus:border-b-4 focus:border-blue-600 transition duration-300" onclick="openTab('inicio')">Página Inicial</button>
+      <button class="tab-button px-6 py-3 text-lg font-semibold bg-white hover:bg-blue-50 focus:bg-blue-100 focus:border-b-4 focus:border-blue-600 transition duration-300" onclick="openTab('posvenda')">Produtos Pós-Vendas</button>
+      <button class="tab-button px-6 py-3 text-lg font-semibold bg-white hover:bg-blue-50 focus:bg-blue-100 focus:border-b-4 focus:border-blue-600 transition duration-300" onclick="openTab('frota')">Minha Frota</button>
+      <button class="tab-button px-6 py-3 text-lg font-semibold bg-white hover:bg-blue-50 focus:bg-blue-100 focus:border-b-4 focus:border-blue-600 transition duration-300" onclick="openTab('oficina')">Oficina Online</button>
+      <button class="tab-button px-6 py-3 text-lg font-semibold bg-white hover:bg-blue-50 focus:bg-blue-100 focus:border-b-4 focus:border-blue-600 transition duration-300" onclick="openTab('financeira')">Área Financeira</button>
+    </div>
+
+    <!-- Conteúdo das Abas -->
+    <div id="inicio" class="tab-content p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-3xl font-bold text-blue-800 mb-6">Painel de Controle</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div class="dashboard-card p-6 bg-sky-100 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-sky-700">Serviços em Andamento</h3>
+        <p class="text-2xl font-bold text-sky-900">6 Veículos</p>
+        <button class="mt-4 px-4 py-2 bg-sky-600 text-white rounded hover:bg-sky-700">Acompanhar na Oficina</button>
+      </div>
+
+      <div class="dashboard-card p-6 bg-indigo-100 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-indigo-700">Orçamentos em Andamento</h3>
+        <p class="text-2xl font-bold text-indigo-900">8 Orçamentos</p>
+        <button class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Negociar com Vendedor</button>
+      </div>
+
+      <div class="dashboard-card p-6 bg-cyan-100 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-cyan-700">Pedidos em Rota de Entrega</h3>
+        <p class="text-2xl font-bold text-cyan-900">6 Pedidos</p>
+        <button class="mt-4 px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-700">Acompanhar Rastreio</button>
+      </div>
+
+      <div class="dashboard-card p-6 bg-lime-100 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-lime-700">Oportunidade Para Você</h3>
+        <p class="text-2xl font-bold text-lime-900">Clique aqui, descubra ou faça sua oferta!</p>
+        <button class="mt-4 px-4 py-2 bg-lime-600 text-white rounded hover:bg-lime-700">Aproveitar Agora</button>
+      </div>
+
+      <div class="dashboard-card p-6 bg-amber-100 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-amber-700">Saldo Disponível</h3>
+        <p class="text-2xl font-bold text-amber-900">R$ 78.900,00</p>
+        <button class="mt-4 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700">Pagar Agora</button>
+      </div>
+
+      <div class="dashboard-card p-6 bg-rose-100 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-rose-700">Em Atraso</h3>
+        <p class="text-2xl font-bold text-rose-900">R$ 1.044,55</p>
+        <button class="mt-4 px-4 py-2 bg-rose-600 text-white rounded hover:bg-rose-700">Pagar ou Negociar Agora</button>
+      </div>
+
+
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Ofertas Exclusivas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-lg font-medium">Caminhão Delivery 11.180</p>
+            <p class="text-gray-600">Entrada + parcelas a consultar</p>
+            <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Saiba Mais</button>
+          </div>
+          <div class="p-4 bg-gray-50 rounded-lg">
+            <p class="text-lg font-medium">Palhetas limpador - 25% OFF</p>
+            <p class="text-gray-600">R$ 229,90</p>
+            <button class="mt-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">Adicionar ao Carrinho</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 text-center">
+        <button class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">Agende seu Serviço Hoje!</button>
+        <p class="mt-2 text-gray-600">Aproveite nossas soluções completas para sua frota.</p>
+      </div>
+    </div>
+
+    <div id="posvenda" class="tab-content p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-3xl font-bold text-blue-800 mb-4">Produtos Pós-Vendas Cequip</h2>
+      <div class="mb-4">
+        <button id="filterTogglePosvenda" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Mostrar Filtros</button>
+        <div id="filterSectionPosvenda" class="filter-section mt-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-md font-medium mb-2">Status:</label>
+              <select class="border p-2 rounded w-full">
+                <option value="">Todos</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Em Transporte">Em Transporte</option>
+                <option value="Entregue">Entregue</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-md font-medium mb-2">Data (de):</label>
+              <input type="date" class="border p-2 rounded w-full">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="p-4 bg-gray-200 rounded">🚚 Frota Ativa: 6 Veículos</div>
+        <div class="p-4 bg-gray-200 rounded">📆 Idade Média: 7,2 anos</div>
+        <div class="p-4 bg-gray-200 rounded">🛢 Custo Médio por KM: R$ 0,44</div>
+        <div class="p-4 bg-gray-200 rounded">📦 Itens em Trânsito: 3 Pedidos</div>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">Histórico de Pedidos e Orçamentos</h3> 
+      <table class="w-full border-collapse mb-6">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border p-2">Data</th>
+            <th class="border p-2">Placa</th>
+            <th class="border p-2">Nº Orçamento</th>
+            <th class="border p-2">Nº Pedido</th>
+            <th class="border p-2">Nota Fiscal</th>
+            <th class="border p-2">Status</th>
+            <th class="border p-2">Tipo de Compra</th>
+            <th class="border p-2">Cequip</th>
+            <th class="border p-2">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border p-2">10/07/2025</td>
+            <td class="border p-2">ABC1D23</td>
+            <td class="border p-2">43210</td>
+            <td class="border p-2">-</td>
+            <td class="border p-2">-</td>
+            <td class="border p-2">Pendente</td>
+            <td class="border p-2">Televendas Peças</td>
+            <td class="border p-2">Cequip Fortaleza</td>
+            <td class="border p-2">
+              <div class="flex flex-col gap-2">
+                <button class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">✔️ Aprovar Agora</button>
+                <button class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600">💰 Fazer Uma Oferta</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="border p-2">08/07/2025</td>
+            <td class="border p-2">XYZ9K87</td>
+            <td class="border p-2">43120</td>
+            <td class="border p-2">31267</td>
+            <td class="border p-2">NF-22455</td>
+            <td class="border p-2">Entregue</td>
+            <td class="border p-2">Oficina</td>
+            <td class="border p-2">Cequip Crato</td>
+            <td class="border p-2 space-x-2">
+              <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📄 Ver NF</button>
+              <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📦 Rastrear</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="border p-2">07/07/2025</td>
+            <td class="border p-2">HZY2152</td>
+            <td class="border p-2">42899</td>
+            <td class="border p-2">30988</td>
+            <td class="border p-2">NF-22010</td>
+            <td class="border p-2">Em Transporte</td>
+            <td class="border p-2">Oficina</td>
+            <td class="border p-2">Cequip Itaatinga</td>
+            <td class="border p-2">
+              <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📦 Rastrear</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="border p-2">06/07/2025</td>
+            <td class="border p-2">KUM7521</td>
+            <td class="border p-2">42890</td>
+            <td class="border p-2">30980</td>
+            <td class="border p-2">NF-21990</td>
+            <td class="border p-2">Trabalhando</td>
+            <td class="border p-2">Oficina</td>
+            <td class="border p-2">Cequip Recife</td>
+            <td class="border p-2">
+              <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📦 Rastrear</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="border p-2">05/07/2025</td>
+            <td class="border p-2">QWE9432</td>
+            <td class="border p-2">42885</td>
+            <td class="border p-2">30975</td>
+            <td class="border p-2">NF-21985</td>
+            <td class="border p-2">Em Execução</td>
+            <td class="border p-2">Oficina</td>
+            <td class="border p-2">Cequip Mossoro</td>
+            <td class="border p-2">
+              <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📦 Rastrear</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="border p-2">04/07/2025</td>
+            <td class="border p-2">GHI1122</td>
+            <td class="border p-2">42880</td>
+            <td class="border p-2">30970</td>
+            <td class="border p-2">NF-21980</td>
+            <td class="border p-2">Finalizado</td>
+            <td class="border p-2">Oficina</td>
+            <td class="border p-2">Cequip Tiangua</td>
+            <td class="border p-2 space-x-2">
+              <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📄 Ver NF</button>
+              <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📦 Rastrear</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">🎯 Sugestões Baseadas na sua Frota</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="p-4 bg-gray-50 rounded-lg">
+          <p>Você já comprou este item para o veículo HZY2152:</p>
+          <p class="font-medium">Palhetas limpador VW Original – R$ 229,90</p>
+          <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">🔁 Comprar Novamente</button>
+        </div>
+        <div class="p-4 bg-gray-50 rounded-lg">
+          <p>Clientes com frota similar também compraram:</p>
+          <p class="font-medium">Filtro de Ar Motor 24.280 – R$ 89,00</p>
+          <button class="mt-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">🛒 Adicionar ao Carrinho</button>
+        </div>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">🛠️ Promoções Ativas para Sua Frota</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 bg-gray-200 rounded-lg">
+          <p class="text-lg font-medium">Filtro de Ar VW</p>
+          <p class="text-gray-600">R$ 89,90</p>
+          <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Comprar</button>
+        </div>
+        <div class="p-4 bg-gray-200 rounded-lg">
+          <p class="text-lg font-medium">Palhetas limpador</p>
+          <p class="text-gray-600">R$ 229,90</p>
+          <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Comprar</button>
+        </div>
+        <div class="p-4 bg-gray-200 rounded-lg">
+          <p class="text-lg font-medium">Óleo 15W40 1L</p>
+          <p class="text-gray-600">R$ 29,00</p>
+          <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Comprar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="frota" class="tab-content p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-3xl font-bold text-blue-800 mb-4">Minha Frota – Inteligente e Integrada</h2>
+      <div class="mb-4">
+        <button id="filterToggleFrota" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Mostrar Filtros</button>
+        <div id="filterSectionFrota" class="filter-section mt-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-md font-medium mb-2">Fabricante:</label>
+              <select class="border p-2 rounded w-full">
+                <option value="">Todos</option>
+                <option value="VW">Volkswagen</option>
+                <option value="ADV">ADV</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-md font-medium mb-2">Idade Média (anos):</label>
+              <input type="number" class="border p-2 rounded w-full" placeholder="Ex: 8.3">
+            </div>
+            <div>
+              <label class="block text-md font-medium mb-2">Custo Médio/KM (R$):</label>
+              <input type="number" step="0.01" class="border p-2 rounded w-full" placeholder="Ex: 0.36">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+        <div class="p-4 bg-gray-200 rounded">🚌 Veículos: 12</div>
+        <div class="p-4 bg-gray-200 rounded">🏭 Fabricantes: 4</div>
+        <div class="p-4 bg-gray-200 rounded">📆 Idade Média: 8,3 anos</div>
+        <div class="p-4 bg-gray-200 rounded">💰 Custo Médio/KM: R$ 0,36</div>
+        <div class="p-4 bg-gray-200 rounded">⚠️ >10 anos: 33%</div>
+      </div>
+      <div class="flex flex-wrap gap-4 mb-6">
+        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">➕ TCO MINHA FROTA</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">📆 Agendar Serviço</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">📅 Plano de Manutenção</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">🛢 Troca de Óleo</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">🔄 Intenção de Troca</button>
+        <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">📋 Avaliação para Venda</button>
+      </div>
+      <div class="space-y-6">
+        <div class="p-4 bg-gray-100 rounded-lg">
+          <h3 class="text-lg font-semibold">💬 HZY2152 – 17.210 EODMWM</h3>
+          <p>Chassi: 9BWRP82W65R527777</p>
+          <p>KM Atual: 429.784</p>
+          <p>KM Previsto: 1.734.524</p>
+          <p>Gasto Total: R$ 857,00</p>
+          <p>Idade: 19,7 anos</p>
+          <p>Data de Aquisição: 13/01/2006</p>
+          <div class="flex gap-2 mt-2">
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📆 Agendar Serviço</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">🔧 Ver Peças</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📖 Ver Histórico</button>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-lg">
+          <h3 class="text-lg font-semibold">💬 KUM7521 – 24.280 E 6x2</h3>
+          <p>Chassi: 9BWZZZ3777KUM0002</p>
+          <p>KM Atual: 720.362</p>
+          <p>KM Previsto: 1.110.242</p>
+          <p>Gasto Total: R$ 192,00</p>
+          <p>Idade: 19,7 anos</p>
+          <p>Data de Aquisição: 25/01/2006</p>
+          <div class="flex gap-2 mt-2">
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📆 Agendar Serviço</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">🔧 Ver Peças</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📖 Ver Histórico</button>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-lg">
+          <h3 class="text-lg font-semibold">💬 QWE9432 – Delivery 11.180</h3>
+          <p>Chassi: 9BWDLV2024R000001</p>
+          <p>KM Atual: 85.300</p>
+          <p>KM Previsto: 500.000</p>
+          <p>Gasto Total: R$ 1.600,00</p>
+          <p>Idade: 3,1 anos</p>
+          <p>Data de Aquisição: 22/05/2022</p>
+          <div class="flex gap-2 mt-2">
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📆 Agendar Serviço</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">🔧 Ver Peças</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📖 Ver Histórico</button>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-lg">
+          <h3 class="text-lg font-semibold">💬 GHI1122 – 17.230 OD Euro VI</h3>
+          <p>Chassi: 9BWODVI6300OD1122</p>
+          <p>KM Atual: 189.000</p>
+          <p>KM Previsto: 800.000</p>
+          <p>Gasto Total: R$ 3.340,00</p>
+          <p>Idade: 5,5 anos</p>
+          <p>Data de Aquisição: 14/10/2019</p>
+          <div class="flex gap-2 mt-2">
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📆 Agendar Serviço</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">🔧 Ver Peças</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📖 Ver Histórico</button>
+          </div>
+        </div>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-800 mt-6">🚛 Ofertas de Caminhões Volkswagen</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="p-4 bg-gray-200 rounded-lg">
+          <p class="text-lg font-medium">Delivery 11.180</p>
+          <p class="text-gray-600">Entrada + parcelas a consultar</p>
+        </div>
+        <div class="p-4 bg-gray-200 rounded-lg">
+          <p class="text-lg font-medium">Constellation 24.280</p>
+          <p class="text-gray-600">Financiamento especial</p>
+        </div>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-800">🛠️ Promoções de Peças Volkswagen</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 bg-gray-200 rounded-lg">
+          <p class="text-lg font-medium">Filtro de Ar</p>
+          <p class="text-gray-600">R$ 89,90 em até 3x</p>
+        </div>
+        <div class="p-4 bg-gray-200 rounded-lg">
+          <p class="text-lg font-medium">Palhetas limpador</p>
+          <p class="text-gray-600">Desconto 25%</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="oficina" class="tab-content p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-3xl font-bold text-blue-800 mb-4">Oficina Online - Cequip</h2>
+      <div class="mb-4">
+        <h3 class="text-lg font-medium mb-2">Filtros</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-md font-medium mb-2">Situação:</label>
+            <select id="statusFilter" class="border p-2 rounded w-full">
+              <option value="Todas">Todas</option>
+              <option value="Trabalhando">Trabalhando</option>
+              <option value="Em Execução">Em Execução</option>
+              <option value="Finalizado">Finalizado</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-md font-medium mb-2">Buscar veículo:</label>
+            <input id="searchFilter" type="text" class="border p-2 rounded w-full" placeholder="Placa, modelo, km...">
+          </div>
+          <div>
+            <label class="block text-md font-medium mb-2">KM Mínimo:</label>
+            <input id="kmFilter" type="number" class="border p-2 rounded w-full" placeholder="Ex: 100000">
+          </div>
+        </div>
+      </div>
+      <div class="flex overflow-x-auto pb-4" id="kanbanBoard">
+        <div class="kanban-column" id="trabalhando">
+          <h3 class="text-lg font-semibold text-red-600 mb-2">Trabalhando <span id="trabalhandoCount">3</span> veículos</h3>
+          <div class="kanban-card relative" draggable="true" data-status="Trabalhando" data-km="181940" data-placa="TD3B860">
+            <p>TD3B860 - Caminhão VW 26.260</p>
+            <p>181.940 km</p>
+            <p>Abertura: 04/07/2025</p>
+            <p>Departamento: Telepeças</p>
+            <p>Cequip: Cequip Fortaleza</p>
+            <span class="inline-block bg-red-500 text-white text-xs px-2 py-1 rounded">Trabalhando</span>
+            <button class="mt-2 px-2 py-1 bg-blue-500 text-white text-sm rounded">Ver detalhes</button>
+            <span class="chat-bubble">💬</span>
+          </div>
+          <div class="kanban-card relative" draggable="true" data-status="Trabalhando" data-km="261200" data-placa="U4PBK4">
+            <p>U4PBK4 - VW 24.260 R</p>
+            <p>261.200 km</p>
+            <p>Abertura: 02/07/2025</p>
+            <p>Departamento: Balcão</p>
+            <p>Cequip: Cequip Crato</p>
+            <span class="inline-block bg-red-500 text-white text-xs px-2 py-1 rounded">Trabalhando</span>
+            <button class="mt-2 px-2 py-1 bg-blue-500 text-white text-sm rounded">Ver detalhes</button>
+            <span class="chat-bubble">💬</span>
+          </div>
+          <div class="kanban-card relative" draggable="true" data-status="Trabalhando" data-km="0" data-placa="VW2686">
+            <p>VW2686 - Caminhão VW 26.260</p>
+            <p>0 km</p>
+            <p>Abertura: 04/07/2025</p>
+            <p>Departamento: Telepeças</p>
+            <p>Cequip: Cequip Itaatinga</p>
+            <span class="inline-block bg-red-500 text-white text-xs px-2 py-1 rounded">Trabalhando</span>
+            <button class="mt-2 px-2 py-1 bg-blue-500 text-white text-sm rounded">Ver detalhes</button>
+            <span class="chat-bubble">💬</span>
+          </div>
+        </div>
+        <div class="kanban-column" id="emexecucao">
+          <h3 class="text-lg font-semibold text-blue-600 mb-2">Em Execução <span id="emexecucaoCount">1</span> veículos</h3>
+          <div class="kanban-card relative" draggable="true" data-status="Em Execução" data-km="270299" data-placa="SAYB801">
+            <p>SAYB801 - VW 24.260</p>
+            <p>270.299 km</p>
+            <p>Abertura: 03/07/2025</p>
+            <p>Departamento: Balcão</p>
+            <p>Cequip: Cequip Recife</p>
+            <span class="inline-block bg-blue-500 text-white text-xs px-2 py-1 rounded">Em Execução</span>
+            <button class="mt-2 px-2 py-1 bg-blue-500 text-white text-sm rounded">Ver detalhes</button>
+            <span class="chat-bubble">💬</span>
+          </div>
+        </div>
+        <div class="kanban-column" id="finalizado">
+          <h3 class="text-lg font-semibold text-green-600 mb-2">Finalizado <span id="finalizadoCount">2</span> veículos</h3>
+          <div class="kanban-card relative" draggable="true" data-status="Finalizado" data-km="296330" data-placa="RID0C83">
+            <p>RID0C83 - ADV Compactor</p>
+            <p>296.330 km</p>
+            <p>Abertura: 30/06/2025</p>
+            <p>Departamento: Telepeças</p>
+            <p>Cequip: Cequip Mossoro</p>
+            <span class="inline-block bg-green-500 text-white text-xs px-2 py-1 rounded">Finalizado</span>
+            <button class="mt-2 px-2 py-1 bg-blue-500 text-white text-sm rounded">Ver detalhes</button>
+            <span class="chat-bubble">💬</span>
+          </div>
+          <div class="kanban-card relative" draggable="true" data-status="Finalizado" data-km="144733" data-placa="SVB6312X">
+            <p>SVB6312X - VW 24.260</p>
+            <p>144.733 km</p>
+            <p>Abertura: 04/07/2025</p>
+            <p>Departamento: Balcão</p>
+            <p>Cequip: Cequip Tiangua</p>
+            <span class="inline-block bg-green-500 text-white text-xs px-2 py-1 rounded">Finalizado</span>
+            <button class="mt-2 px-2 py-1 bg-blue-500 text-white text-sm rounded">Ver detalhes</button>
+            <span class="chat-bubble">💬</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="financeira" class="tab-content p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-3xl font-bold text-blue-800 mb-4">Área Financeira do Cliente – Cequip</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="p-6 bg-blue-50 rounded-lg">
+          <h3 class="text-xl font-semibold text-blue-700">Resumo do Cliente</h3>
+          <p><strong>Cliente:</strong> Transportes S. Ltda</p>
+          <p><strong>CNPJ:</strong> 12.XXX.XXX/000X-99</p>
+          <p><strong>Status de Crédito:</strong> Crédito Liberado desde 11/07/2025</p>
+          <p><strong>Saldo Disponível:</strong> R$ 78.900,00</p>
+          <p><strong>Em Avaliação:</strong> R$ 5.000,00</p>
+        </div>
+        <div class="p-6 bg-green-50 rounded-lg">
+          <h3 class="text-xl font-semibold text-green-700">Indicadores Rápidos</h3>
+          <p><strong>Total de Compras no Ano:</strong> R$ 1.350.000,00</p>
+          <p><strong>Ticket Médio:</strong> R$ 12.980,45</p>
+          <p><strong>Valor em Aberto:</strong> R$ 4.102,89</p>
+          <p><strong>Títulos Vencidos:</strong> 0</p>
+          <p><strong>Total Pago no Ano:</strong> R$ 4.775.166,77</p>
+          <p><strong>Juros/Multa:</strong> -R$ 50,26</p>
+        </div>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">Movimentações Recentes</h3>
+      <table class="w-full border-collapse mb-6">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border p-2">Orçamento</th>
+            <th class="border p-2">Pedido</th>
+            <th class="border p-2">Nota Fiscal</th>
+            <th class="border p-2">Status</th>
+            <th class="border p-2">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border p-2">123456</td>
+            <td class="border p-2">456789</td>
+            <td class="border p-2">987654</td>
+            <td class="border p-2">Entregue</td>
+          <td class="border p-2">
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📦 Rastrear</button>
+            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📄 Ver NF</button>
+            <button class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600">💰 Fazer Uma Oferta</button>
+          </td>
+          </tr>
+          <tr>
+            <td class="border p-2">123457</td>
+            <td class="border p-2">456790</td>
+            <td class="border p-2">-</td>
+            <td class="border p-2">Aguardando Faturamento</td>
+            <td class="border p-2"><button class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">✔️ Aprovar Agora</button></td>
+          </tr>
+          <tr>
+            <td class="border p-2">123458</td>
+            <td class="border p-2">456791</td>
+            <td class="border p-2">987655</td>
+            <td class="border p-2">Nota Emitida</td>
+            <td class="border p-2"><button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">📄 Ver NF</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">Ações Financeiras</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <button class="px-4 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">📥 Boletos em Aberto</button>
+        <button class="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">📄 Segunda Via de Boleto</button>
+        <button class="px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600">💳 Pagar Agora</button>
+        <button class="px-4 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600">📊 Simular Parcelamento</button>
+        <button class="px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600">📞 Falar com Financeiro</button>
+      </div>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4">Análises e Projeções</h3>
+      <div class="p-6 bg-gray-50 rounded-lg text-center">
+        <p>Gráficos de desempenho financeiro disponíveis em breve!</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openTab(tabName) {
+      const tabs = document.querySelectorAll('.tab-content');
+      const buttons = document.querySelectorAll('.tab-button');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      buttons.forEach(button => button.classList.remove('bg-blue-100', 'border-b-4', 'border-blue-600'));
+      document.getElementById(tabName).classList.add('active');
+      document.querySelector(`button[onclick="openTab('${tabName}')"]`).classList.add('bg-blue-100', 'border-b-4', 'border-blue-600');
+    }
+    openTab('inicio');
+
+    // Drag and Drop functionality for Kanban
+    let draggedItem = null;
+
+    document.addEventListener('dragstart', (e) => {
+      draggedItem = e.target;
+      e.target.classList.add('dragging');
+    });
+
+    document.addEventListener('dragend', (e) => {
+      e.target.classList.remove('dragging');
+    });
+
+    document.querySelectorAll('.kanban-column').forEach(column => {
+      column.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      column.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (draggedItem) {
+          column.appendChild(draggedItem);
+          updateCounts();
+          draggedItem = null;
+        }
+      });
+    });
+
+    // Filter functionality for Kanban
+    document.getElementById('statusFilter').addEventListener('change', filterCards);
+    document.getElementById('searchFilter').addEventListener('input', filterCards);
+    document.getElementById('kmFilter').addEventListener('input', filterCards);
+
+    function filterCards() {
+      const statusFilter = document.getElementById('statusFilter').value;
+      const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+      const kmFilter = parseInt(document.getElementById('kmFilter').value) || 0;
+
+      document.querySelectorAll('.kanban-card').forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+        const cardPlaca = card.querySelector('p').textContent.toLowerCase();
+        const cardKm = parseInt(card.getAttribute('data-km'));
+
+        const statusMatch = statusFilter === 'Todas' || cardStatus === statusFilter;
+        const searchMatch = cardPlaca.includes(searchFilter);
+        const kmMatch = cardKm >= kmFilter;
+
+        card.style.display = statusMatch && searchMatch && kmMatch ? 'block' : 'none';
+      });
+      updateCounts();
+    }
+
+    function updateCounts() {
+      const columns = ['trabalhando', 'emexecucao', 'finalizado'];
+      columns.forEach(col => {
+        const count = document.getElementById(col).querySelectorAll('.kanban-card:not([style*="display: none"])').length;
+        document.getElementById(`${col}Count`).textContent = count;
+      });
+    }
+
+    // Toggle filters for other tabs
+    document.getElementById('filterToggleFrota').addEventListener('click', () => {
+      document.getElementById('filterSectionFrota').classList.toggle('active');
+    });
+    document.getElementById('filterTogglePosvenda').addEventListener('click', () => {
+      document.getElementById('filterSectionPosvenda').classList.toggle('active');
+    });
+
+    updateCounts();
+  </script>
+</body>
+</html>
